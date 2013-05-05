@@ -190,13 +190,12 @@
 		qcom,actuator-src = <&actuator1>;
 		qcom,eeprom-src = <&eeprom7>;
 		qcom,led-flash-src = <&led_flash0>;
-		qcom,sensor-name = "skuf_ov12830_p12v01c";
 		cam_vdig-supply = <&pm8226_l5>;
 		cam_vana-supply = <&pm8226_l19>;
 		cam_vio-supply = <&pm8226_lvs1>;
 		cam_vaf-supply = <&pm8226_l15>;
 		qcom,cam-vreg-name = "cam_vdig", "cam_vio", "cam_vana",
-			"cam_vaf";
+			 "cam_vaf";
 		qcom,cam-vreg-type = <0 1 0 0>;
 		qcom,cam-vreg-min-voltage = <1290000 0 2850000 2800000>;
 		qcom,cam-vreg-max-voltage = <1290000 0 2850000 2800000>;
@@ -216,15 +215,14 @@
 		status = "ok";
 	};
 
-	qcom,camera@6a {
-		compatible = "ovti,ov5648";
-		reg = <0x6a>;
-		qcom,slave-id = <0x6c 0x300a 0x5648>;
+	qcom,camera@1 {
+		cell-index = <1>;
+		compatible = "qcom,camera";
+		reg = <0x1>;
 		qcom,csiphy-sd-index = <1>;
 		qcom,csid-sd-index = <1>;
 		qcom,eeprom-src = <&eeprom6>;
 		qcom,mount-angle = <270>;
-		qcom,sensor-name = "skuf_ov5648_p5v23c";
 		cam_vdig-supply = <&pm8226_l5>;
 		cam_vana-supply = <&pm8226_l19>;
 		cam_vio-supply = <&pm8226_lvs1>;
