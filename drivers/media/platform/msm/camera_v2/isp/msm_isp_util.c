@@ -1205,6 +1205,7 @@ irqreturn_t msm_isp_process_irq(int irq_num, void *data)
 			__func__);
 		return IRQ_HANDLED;
 	}
+
 	msm_isp_process_overflow_irq(vfe_dev,
 		&irq_status0, &irq_status1);
 	vfe_dev->hw_info->vfe_ops.core_ops.
