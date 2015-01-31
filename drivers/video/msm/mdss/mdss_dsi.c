@@ -321,7 +321,7 @@ static int mdss_dsi_off(struct mdss_panel_data *pdata)
 
 	mutex_lock(&ctrl_pdata->mutex);
 	panel_info = &ctrl_pdata->panel_data.panel_info;
-	pr_debug("%s+: ctrl=%p ndx=%d\n", __func__,
+	pr_info("%s+: ctrl=%p ndx=%d\n", __func__,
 				ctrl_pdata, ctrl_pdata->ndx);
 
 	if (pdata->panel_info.type == MIPI_CMD_PANEL)
@@ -733,7 +733,7 @@ int mdss_dsi_on(struct mdss_panel_data *pdata)
 	if (pdata->panel_info.type == MIPI_CMD_PANEL)
 		mdss_dsi_clk_ctrl(ctrl_pdata, DSI_ALL_CLKS, 0);
 
-	pr_debug("%s-:\n", __func__);
+	pr_info("%s-:\n", __func__);
 	return 0;
 }
 
@@ -1074,6 +1074,7 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 	case MDSS_EVENT_ENABLE_PARTIAL_UPDATE:
 		rc = mdss_dsi_ctl_partial_update(pdata);
 		break;
+<<<<<<< HEAD
 	case MDSS_EVENT_DSI_ULPS_CTRL:
 		rc = mdss_dsi_ulps_config(ctrl_pdata, (int)arg);
 		break;
@@ -1084,6 +1085,10 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 	case MDSS_EVENT_DSI_DYNAMIC_SWITCH:
 		rc = mdss_dsi_update_panel_config(ctrl_pdata,
 					(int)(unsigned long) arg);
+=======
+	case MDSS_EVENT_DISPPARAM:
+		rc = mdss_dsi_dispparam(pdata);
+>>>>>>> 9004925... Xiaomi kernel changes for HM NOTE LTE KK
 		break;
 	default:
 		pr_debug("%s: unhandled event=%d\n", __func__, event);

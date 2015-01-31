@@ -82,6 +82,7 @@ enum dsi_panel_bl_ctrl {
 	BL_PWM,
 	BL_WLED,
 	BL_DCS_CMD,
+	BL_SIC,
 	UNKNOWN_CTRL,
 };
 
@@ -247,6 +248,7 @@ struct mdss_dsi_ctrl_pdata {
 	int (*on) (struct mdss_panel_data *pdata);
 	int (*off) (struct mdss_panel_data *pdata);
 	int (*partial_update_fnc) (struct mdss_panel_data *pdata);
+	int (*dispparam_fnc) (struct mdss_panel_data *pdata);
 	int (*check_status) (struct mdss_dsi_ctrl_pdata *pdata);
 	int (*cmdlist_commit)(struct mdss_dsi_ctrl_pdata *ctrl, int from_mdp);
 	void (*switch_mode) (struct mdss_panel_data *pdata, int mode);
