@@ -4236,7 +4236,7 @@ static int mxt_input_disable(struct input_dev *in_dev)
 
 #if defined(CONFIG_TOUCHSCREEN_PREVENT_SLEEP)
 	if (prevent_sleep)
-		disable_irq_wake(client->irq);
+		enable_irq_wake(client->irq);
 	else
 #endif
 	error = mxt_suspend(&ts->client->dev);
