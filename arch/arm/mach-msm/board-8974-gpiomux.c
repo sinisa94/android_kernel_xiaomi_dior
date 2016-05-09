@@ -70,7 +70,7 @@ static struct gpiomux_setting ap2mdm_wakeup = {
 	.dir = GPIOMUX_OUT_LOW,
 };
 
-static struct msm_gpiomux_config mdm_configs[] __initdata = {
+static struct msm_gpiomux_config mdm_configs[] = {
 	/* AP2MDM_STATUS */
 	{
 		.gpio = 105,
