@@ -1074,7 +1074,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 	case MDSS_EVENT_ENABLE_PARTIAL_UPDATE:
 		rc = mdss_dsi_ctl_partial_update(pdata);
 		break;
-<<<<<<< HEAD
 	case MDSS_EVENT_DSI_ULPS_CTRL:
 		rc = mdss_dsi_ulps_config(ctrl_pdata, (int)arg);
 		break;
@@ -1085,10 +1084,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 	case MDSS_EVENT_DSI_DYNAMIC_SWITCH:
 		rc = mdss_dsi_update_panel_config(ctrl_pdata,
 					(int)(unsigned long) arg);
-=======
-	case MDSS_EVENT_DISPPARAM:
-		rc = mdss_dsi_dispparam(pdata);
->>>>>>> 9004925... Xiaomi kernel changes for HM NOTE LTE KK
 		break;
 	default:
 		pr_debug("%s: unhandled event=%d\n", __func__, event);

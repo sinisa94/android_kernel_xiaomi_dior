@@ -1427,6 +1427,8 @@ qpnp_chg_usb_chg_gone_irq_handler(int irq, void *_chip)
 			gpio_direction_output(chip->ext_ovp_isns_gpio, 0);
 		}
 
+		usb_in = qpnp_chg_is_usb_chg_plugged_in(chip);
+
 		qpnp_chg_charge_en(chip, 0);
 
 		qpnp_chg_force_run_on_batt(chip, 1);

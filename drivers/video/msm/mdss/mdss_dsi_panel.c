@@ -1319,19 +1319,6 @@ int mdss_dsi_panel_init(struct device_node *node,
 	pinfo->dynamic_switch_pending = false;
 	pinfo->is_lpm_mode = false;
 
-	dispparam_enabled = of_property_read_bool(node,
-						"qcom,dispparam-enabled");
-	if (dispparam_enabled) {
-		pr_info("%s:%d Dispparam enabled.\n", __func__, __LINE__);
-		ctrl_pdata->panel_data.panel_info.dispparam_enabled = 1;
-		ctrl_pdata->dispparam_fnc = mdss_dsi_panel_dispparam;
-	} else {
-		pr_info("%s:%d Dispparam disabled.\n", __func__, __LINE__);
-		ctrl_pdata->panel_data.panel_info.dispparam_enabled = 0;
-		ctrl_pdata->dispparam_fnc = NULL;
-	}
-
-
 	ctrl_pdata->on = mdss_dsi_panel_on;
 	ctrl_pdata->off = mdss_dsi_panel_off;
 	ctrl_pdata->panel_data.set_backlight = mdss_dsi_panel_bl_ctrl;

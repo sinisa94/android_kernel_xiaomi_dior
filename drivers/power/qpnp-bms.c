@@ -991,28 +991,6 @@ static int estimate_ocv(struct qpnp_bms_chip *chip, int batt_temp)
 	return ocv_est_uv;
 }
 
-static int read_saved_instant_ocv(struct qpnp_bms_chip *chip)
-{
-	u8 reg;
-	int rc, instant_ocv_mv;
-
-	rc = qpnp_read_wrapper(chip, &reg,
-		chip->base + INST_OCV_STORAGE_REG, 1);
-	if (rc || reg == INST_OCV_INVALID) {
-		pr_err("failed to read addr = %d %d\n",
-				chip->base + INST_OCV_STORAGE_REG, rc);
-		return INST_OCV_INVALID;
-	} else {
-		instant_ocv_mv = 3400 + reg * 4;
-		if (instant_ocv_mv > chip->max_voltage_uv / 1000)
-			instant_ocv_mv = chip->max_voltage_uv / 1000;
-
-		pr_info("read instant ocv %d reg %x\n", instant_ocv_mv, reg);
-
-		return instant_ocv_mv;
-	}
-}
-
 static void backup_instant_ocv(struct qpnp_bms_chip *chip, int instant_ocv_mv)
 {
 	u8 reg;
