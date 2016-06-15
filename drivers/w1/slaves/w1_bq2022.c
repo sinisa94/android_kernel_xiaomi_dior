@@ -1,9 +1,16 @@
 /*
  * drivers/w1/slaves/w1_bq2022.c
  *
+ * Copyright (C) 2012 Xiaomi, Inc.
  * Copyright (C) 2015 Xiaomi, Inc.
  *
+ * This file is licensed under the terms of the GNU General Public License
+ * version 2. This program is licensed "as is" without any warranty of any
+ * kind, whether express or implied.
+ *
  */
+
+#define pr_fmt(fmt)	"bq2022: %s: " fmt, __func__
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/device.h>
@@ -23,19 +30,27 @@
 #define CRYPT_COMMON_HEADER	(0xE54C21ED)
 
 /*PSEUDO_INFO = int(B8, B61, B62, B63*/
-#define BQ2022_ID_COSLIGHT		(0xdf0c7a62)
-#define BQ2022_ID_AAC			(0xaacaacaa)
-#define BQ2022_ID_DELSA			(0x8412e562)
+#define LG_DESA				(0x10139465)
+
+#define SAMSUNG_FMT			(0xf40e9762)
+#define SAMSUNG_XWD			(0x10139461)
+#define SAMSUNG_XWD_CD      (0x10139464)
+
+#define SONY_FMT			(0x10139466)
+#define SONY_XWD			(0x10139463)
+
+#define GUANGYU_GUANGYU		(0x10139462)
+
+#define RUISHENG_RUISHENG	(0x10139467)
 
 /*PSEUDO_ID*/
-/* 0x30000	12kohm */
-/* 0x40000	17kohm */
-/* 0x50000	22kohm */
-/* 0x60000	28kohm */
-/* 0x70000	?? */
-#define PSEUDO_KOHM_COSLIGHT	(0x30000)		/*batt_id_kohm =12*/
-#define PSEUDO_KOHM_AAC	(0x40000)		/*batt_id_kohm =17*/
-#define PSEUDO_KOHM_DELSA	(0x50000)		/*batt_id_kohm =22*/
+#define PSEUDO_LG			(0x30000)		/*batt_id_kohm =12*/
+#define PSEUDO_SAMSUNG		(0x40000)		/*batt_id_kohm =17*/
+#define PSEUDO_SONY			(0x50000)		/*batt_id_kohm =22*/
+#define PSEUDO_GUANGYU		(0x60000)		/*batt_id_kohm =28*/
+#define PSEUDO_RUISHENG		(0x70000)		/*batt_id_kohm =33*/
+#define PSEUDO_SAMSUNG_CD   (0x80000)       /*batt_id_kohm =38*/
+
 
 #define GEN_PSEUDO_INFO(ptr) (((*((unsigned int *)&ptr[60]))&0xFFFFFF00)|((unsigned int)ptr[8]))
 #define GEN_PSEUDO_HEADER(ptr) (*((unsigned int *)&ptr[0]))
@@ -101,17 +116,33 @@ int w1_bq2022_battery_id(void)
 	}
 
 	switch(pseduo_info) {
-		case BQ2022_ID_COSLIGHT:
-			ret = PSEUDO_KOHM_COSLIGHT;
-			break;
-		case BQ2022_ID_AAC:
-			ret = PSEUDO_KOHM_AAC;
-			break;
-		case BQ2022_ID_DELSA:
-			ret = PSEUDO_KOHM_DELSA;
-			break;
-		default:
-			ret = 0;
+	/* SCUD manufacturer*/
+	/* old data */
+	case LG_DESA:
+		ret = PSEUDO_LG;
+		break;
+
+	case SAMSUNG_FMT:
+	case SAMSUNG_XWD:
+		ret = PSEUDO_SAMSUNG;
+		break;
+
+    case SAMSUNG_XWD_CD:
+		ret = PSEUDO_SAMSUNG_CD;
+		break;
+
+	case SONY_FMT:
+	case SONY_XWD:
+		ret = PSEUDO_SONY;
+		break;
+
+	case GUANGYU_GUANGYU:
+		ret = PSEUDO_GUANGYU;
+		break;
+
+	case RUISHENG_RUISHENG:
+		ret = PSEUDO_RUISHENG;
+		break;
 	}
 	bq2022_debug = ret;
 	return ret;
