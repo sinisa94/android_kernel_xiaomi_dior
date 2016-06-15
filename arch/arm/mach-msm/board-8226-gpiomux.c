@@ -1,5 +1,4 @@
 /* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
- * Copyright (C) 2015 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -58,42 +57,6 @@ static struct msm_gpiomux_config msm_hsic_configs[] = {
 };
 #endif
 
-static struct gpiomux_setting smsc_hub_act_cfg = {
-	.func = GPIOMUX_FUNC_GPIO,
-	.drv = GPIOMUX_DRV_8MA,
-	.pull = GPIOMUX_PULL_NONE,
-};
-
-static struct gpiomux_setting smsc_hub_susp_cfg = {
-	.func = GPIOMUX_FUNC_GPIO,
-	.drv = GPIOMUX_DRV_2MA,
-	.pull = GPIOMUX_PULL_NONE,
-};
-
-static struct msm_gpiomux_config smsc_hub_configs[] = {
-	{
-		.gpio = 114, /* reset_n */
-		.settings = {
-			[GPIOMUX_ACTIVE] = &smsc_hub_act_cfg,
-			[GPIOMUX_SUSPENDED] = &smsc_hub_susp_cfg,
-		},
-	},
-	{
-		.gpio = 8, /* clk_en */
-		.settings = {
-			[GPIOMUX_ACTIVE] = &smsc_hub_act_cfg,
-			[GPIOMUX_SUSPENDED] = &smsc_hub_susp_cfg,
-		},
-	},
-	{
-		.gpio = 9, /* int_n */
-		.settings = {
-			[GPIOMUX_ACTIVE] = &smsc_hub_act_cfg,
-			[GPIOMUX_SUSPENDED] = &smsc_hub_susp_cfg,
-		},
-	},
-};
-
 #define KS8851_IRQ_GPIO 115
 
 #if defined(CONFIG_KS8851) || defined(CONFIG_KS8851_MODULE)
@@ -128,13 +91,14 @@ static struct gpiomux_setting synaptics_int_sus_cfg = {
 static struct gpiomux_setting synaptics_reset_act_cfg = {
 	.func = GPIOMUX_FUNC_GPIO,
 	.drv = GPIOMUX_DRV_6MA,
-	.pull = GPIOMUX_PULL_DOWN,
+	.pull = GPIOMUX_PULL_UP,
 };
 
 static struct gpiomux_setting synaptics_reset_sus_cfg = {
 	.func = GPIOMUX_FUNC_GPIO,
 	.drv = GPIOMUX_DRV_2MA,
-	.pull = GPIOMUX_PULL_DOWN,
+	.pull = GPIOMUX_PULL_UP,
+	.dir = GPIOMUX_OUT_LOW,
 };
 
 static struct gpiomux_setting gpio_keys_active = {
@@ -166,11 +130,11 @@ static struct gpiomux_setting gpio_spi_susp_config = {
 	.pull = GPIOMUX_PULL_DOWN,
 };
 
-static struct gpiomux_setting gpio_spi_cs_eth_config = {
+/*static struct gpiomux_setting gpio_spi_cs_eth_config = {
 	.func = GPIOMUX_FUNC_4,
 	.drv = GPIOMUX_DRV_6MA,
 	.pull = GPIOMUX_PULL_DOWN,
-};
+};*/
 
 static struct gpiomux_setting wcnss_5wire_suspend_cfg = {
 	.func = GPIOMUX_FUNC_GPIO,
@@ -252,6 +216,7 @@ static struct gpiomux_setting lcd_bl_hwen_sus_cfg = {
 	.pull = GPIOMUX_PULL_DOWN,
 };
 
+
 static struct msm_gpiomux_config msm_lcd_configs[] __initdata = {
 	{
 		.gpio = 4,
@@ -327,9 +292,17 @@ static struct msm_gpiomux_config msm_blsp_configs[] __initdata = {
 		},
 	},
 	{
-		.gpio      = 22,		/* BLSP1 QUP1 SPI_CS_ETH */
+		.gpio      = 22,		/* BLSP1 QUP6 I2C_SDA */
 		.settings = {
-			[GPIOMUX_SUSPENDED] = &gpio_spi_cs_eth_config,
+			[GPIOMUX_ACTIVE] = &gpio_i2c_config,
+			[GPIOMUX_SUSPENDED] = &gpio_i2c_config,
+		},
+	},
+	{
+		.gpio      = 23,		/* BLSP1 QUP6 I2C_SCL */
+		.settings = {
+			[GPIOMUX_ACTIVE] = &gpio_i2c_config,
+			[GPIOMUX_SUSPENDED] = &gpio_i2c_config,
 		},
 	},
 	{					/*  NFC   */
@@ -817,7 +790,6 @@ static struct msm_gpiomux_config msm_sensor_configs[] __initdata = {
 			[GPIOMUX_SUSPENDED] = &cam_settings[4],
 		},
 	},
-
 };
 
 static struct msm_gpiomux_config msm_sensor_configs_skuf_plus[] __initdata = {
@@ -984,7 +956,11 @@ static void msm_gpiomux_sdc3_install(void) {}
 static struct gpiomux_setting hs_uart_sw_suspend_cfg = {
         .func = GPIOMUX_FUNC_GPIO,
         .drv = GPIOMUX_DRV_2MA,
+#ifdef CONFIG_MSM_UART_HS_USE_HS
         .dir = GPIOMUX_OUT_LOW,
+#else
+        .dir = GPIOMUX_OUT_HIGH,
+#endif
 };
 
 static struct msm_gpiomux_config hs_uart_sw_configs[] __initdata = {
@@ -1030,7 +1006,6 @@ void __init msm8226_init_gpiomux(void)
 		pr_err("%s failed %d\n", __func__, rc);
 		return;
 	}
-
 #if defined(CONFIG_KS8851) || defined(CONFIG_KS8851_MODULE)
 	msm_gpiomux_install(msm_eth_configs, ARRAY_SIZE(msm_eth_configs));
 #endif
@@ -1097,10 +1072,6 @@ void __init msm8226_init_gpiomux(void)
 	msm_gpiomux_install(msm_hsic_configs, ARRAY_SIZE(msm_hsic_configs));
 #endif
 	msm_gpiomux_install(msm_haptic_configs, ARRAY_SIZE(msm_haptic_configs));
-
-	if (machine_is_msm8926() && of_board_is_mtp())
-		msm_gpiomux_install(smsc_hub_configs,
-			ARRAY_SIZE(smsc_hub_configs));
 }
 
 static void wcnss_switch_to_gpio(void)
