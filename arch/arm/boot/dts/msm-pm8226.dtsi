@@ -79,9 +79,9 @@
 			qcom,vddmax-mv = <4350>;
 			qcom,vddsafe-mv = <4400>;
 			qcom,vinmin-mv = <4300>;
-			qcom,vbatdet-delta-mv = <50>;
-			qcom,ibatmax-ma = <1450>;
-			qcom,ibatterm-ma = <150>;
+			qcom,vbatdet-delta-mv = <100>;
+			qcom,ibatmax-ma = <1500>;
+			qcom,ibatterm-ma = <100>;
 			qcom,ibatsafe-ma = <1500>;
 			qcom,thermal-mitigation = <1500 700 600 325>;
 			qcom,resume-soc = <99>;
@@ -93,13 +93,12 @@
 			qcom,warm-bat-decidegc = <450>;
 			qcom,warm-bat-mv = <4100>;
 			qcom,ibatmax-cool-ma = <600>;
-			qcom,cool-bat-decidegc = <20>;
+			qcom,cool-bat-decidegc = <100>;
 			qcom,cool-bat-mv = <4100>;
-			qcom,batt-hot-percentage = <25>;
-	        	qcom,batt-cold-percentage = <80>;
-			qcom,maxinput-usb-ma = <1800>;
 			qcom,use-external-rsense;
 			qcom,ext-ovp-present;
+			qcom,chg-iadc = <&pm8226_iadc>;
+			qcom,ibat-calibration-enabled;
 
 
 			pm8226_chg_chgr: qcom,chgr@1000 {
@@ -440,27 +439,19 @@
 			qcom,adc-vdd-reference = <1800>;
 			qcom,iadc-vadc = <&pm8226_vadc>;
 			qcom,iadc-poll-eoc;
-			qcom,use-default-rds-trim = <0>;
+			qcom,use-default-rds-trim = <2>;
 			qcom,pmic-revid = <&pm8226_revid>;
 
 			chan@0 {
 				label = "internal_rsense";
 				reg = <0>;
 				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
 				qcom,fast-avg-setup = <0>;
 			};
 			chan@1 {
 				label = "external_rsense";
 				reg = <1>;
 				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
 				qcom,fast-avg-setup = <0>;
 			};
 		};
